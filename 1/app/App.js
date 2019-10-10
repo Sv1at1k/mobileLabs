@@ -1,39 +1,27 @@
 import React from 'react';
-import {
-  Text,
-} from 'react-native';
 import { createAppContainer,NavigationActions } from 'react-navigation';
 import { createStackNavigator, StackActions } from 'react-navigation-stack';
+import Home from './activities/Home.js';
+import SignUp from './activities/SignUp.js';
+import Welcome from './activities/Welcome.js';
 
-import HomeActivity from './activities/HomeActivity.js';
-import SignUpActivity from './activities/SignUpActivity.js';
-import SignInActivity from './activities/SignInActivity.js';
-
-
-export default function App() {
- 
+const App = () =>  {
     return (
-
        <AppContainer />
-
     );
- 
 }
-
-
+export default App
 const AppNavigator = createStackNavigator({
   Home: {
-    screen: HomeActivity
+    screen: Home
   },
   signUp: {
-    screen: SignUpActivity
+    screen: SignUp
   },
-  signIn: {
-    screen:SignInActivity
+  Welcome: {
+    screen:Welcome
   },
 },{
         initialRouteName: "Home"
 });
-
 const AppContainer = createAppContainer(AppNavigator);
-
