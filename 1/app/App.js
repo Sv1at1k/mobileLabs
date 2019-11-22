@@ -1,9 +1,9 @@
 import React from 'react';
 import { createAppContainer,NavigationActions } from 'react-navigation';
 import { createStackNavigator, StackActions } from 'react-navigation-stack';
-import Home from './activities/Home.js';
-import SignUp from './activities/SignUp.js';
-import Welcome from './activities/Welcome.js';
+import Home from './components/Home.js';
+import SignUp from './components/SignUp.js';
+import Welcome from './components/Welcome.js';
 
 const App = () =>  {
     return (
