@@ -7,7 +7,8 @@ import {
     Text,
 } from 'react-native';
 import firebase from './src/firebase'
-import regex from './src/emailRegex'
+import validate from './src/validator'
+
 export default class SignUp extends React.Component {
     constructor(props) {
         super(props);
@@ -36,60 +37,7 @@ export default class SignUp extends React.Component {
     goToHome = () =>{
         this.props.navigation.navigate('Home');
     } 
-    validate = (text, type) => {
-        if (type == "email") {
-            if (regex.test(text)) {
-                this.setState({
-                    emailValid: true,
-                    email: text
-                })
-            } else {
-                this.setState({
-                    emailValid: false
-                })
-            }
-        }
-        if (type == "password") {
-            if (text.length < 8) {
-                this.setState({
-                    passwordValid: false
-                })
     
-            } else {
-                this.setState({
-                    passwordValid: true,
-                    password: text
-                })
-            }
-        }
-        if (type == "name") {
-            if (text.length < 1) {
-                this.setState({
-                    nameValid: false
-                })
-    
-            } else {
-    
-                this.setState({
-                    nameValid: true,
-                    name: text
-                })
-            }
-        }
-        if (type == "number") {
-            if (text.length < 8) {
-                this.setState({
-                    phoneValid: false
-                })
-    
-            } else {
-                this.setState({
-                    phoneValid: true,
-                    phone: text
-                })
-            }
-        }
-    }
     render() {
         return (
             <View style={styles.container}>
@@ -99,7 +47,15 @@ export default class SignUp extends React.Component {
                     style={styles.inputContainer}
                     autoCapitalize="none"
                     autoCorrect={false}
-                    onChangeText={email => this.validate(email, "email")}
+                    onChangeText={
+                        email => {
+                            this.setState({
+                                emailValid:validate(email,"email"),
+                                email:email
+                            })
+                        } 
+                    }
+                
                 /> 
                 <Text style={[styles.errorMessage, this.state.emailValid ? styles.setInvisible : null]}>Email is not valid</Text>
 
@@ -108,7 +64,13 @@ export default class SignUp extends React.Component {
                     style={styles.inputContainer}
                     autoCapitalize="none"
                     autoCorrect={false}
-                    onChangeText={name => this.validate(name, "name")}
+                    onChangeText={name =>  { 
+                        this.setState({
+                            nameValid: validate(name,"name"),
+                            name: name
+                         })
+                    }
+                }
                 />
                <Text style={[styles.errorMessage, this.state.nameValid ? styles.setInvisible : null]}>Name is required</Text>
               
@@ -118,7 +80,13 @@ export default class SignUp extends React.Component {
                     autoCapitalize="none"
                     autoCorrect={false}
                     keyboardType={'numeric'}
-                    onChangeText={phone => this.validate(phone, "phone")}
+                    onChangeText={phone =>  { 
+                            this.setState({
+                                phoneValid: validate(phone,"phone"),
+                                phone: phone
+                             })
+                        }
+                    }
                 />
                 <Text style={[styles.errorMessage, this.state.phoneValid ? styles.setInvisible : null]}>Phone is not valid</Text>
 
@@ -128,7 +96,13 @@ export default class SignUp extends React.Component {
                     secureTextEntry={true}
                     autoCapitalize="none"
                     autoCorrect={false}
-                    onChangeText={password => this.validate(password, "password")}
+                    onChangeText={password => { 
+                        this.setState({
+                            passwordValid: validate(password,"password"),
+                            password: password
+                         })
+                    }
+                }
                 />
                 <Text style={[styles.errorMessage, this.state.passwordValid ? styles.setInvisible : null]}>Password must be more than 8 characters long</Text>
                 <View style={styles.buttonContainer} >
@@ -141,11 +115,7 @@ export default class SignUp extends React.Component {
                     />
                 </View>
                 <View style={styles.buttonContainer}>
-                    <Button
-                        onPress={() => {
-                            goToHome();
-                        }
-                    }
+                    <Button onPress= { () =>this.goToHome()}
                         title="Back to Home"
                     />
                 </View>

@@ -16,7 +16,6 @@ export default class Welcome extends React.Component {
                 <Button
                     onPress={() => {
                         this.signOut();
-                       
                     }}
                     title="Sign Out"
                 />

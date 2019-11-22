@@ -7,7 +7,7 @@ import {
     Text,
 } from 'react-native';
 import firebase from './src/firebase'
-import regex from './src/emailRegex'
+import validate from './src/validator'
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -20,51 +20,30 @@ export default class Home extends React.Component {
     }
     signIn = async () => {
         await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
-        this.props.navigation.navigate("Welcome");
+        this.goToSignIn();
     };
     
     goToSignIn = ()=>{
-        this.props.navigation.navigate('signUp');
+        this.props.navigation.navigate('Welcome');
     }
     goToSignUp = ()=>{
         this.props.navigation.navigate('signUp');
     }
-    validate = (text, type) => {
-        if (type == "email") {
-            if (regex.test(text)) {
-                this.setState({
-                    emailValid: true,
-                    email: text
-                })
-    
-            } else {
-                this.setState({
-                    emailValid: false
-                })
-            }
-        }
-        if (type == "password") {
-            if (text.length < 8) {
-                this.setState({
-                    passwordValid: false
-                })
-    
-            } else {
-                this.setState({
-                    passwordValid: true,
-                    password: text
-                })
-            }
-        }
-    }
+
     render() {
         return (
-
             <View style={styles.container}>
                 <Text style={styles.text}>Email</Text>
                 <TextInput
                     style={[styles.inputContainer, !this.state.emailValid ? styles.error : null]}
-                    onChangeText={email => this.validate(email, "email",this.state)}
+                    onChangeText={
+                        email => {
+                            this.setState({
+                                emailValid:validate(email,"email"),
+                                email:email
+                            })
+                        } 
+                    }  
                 />
                 <Text style={[styles.errorMessage, 
                     this.state.emailValid ? styles.setInvisible : null]}>Email is not valid</Text>
@@ -75,27 +54,28 @@ export default class Home extends React.Component {
                          !this.state.passwordValid ? styles.error : null]}
                     secureTextEntry={true}
                     autoCapitalize="none"
-                    onChangeText={password => this.validate(password, "password",this.state)}
+                    onChangeText={
+                        password => { 
+                            this.setState({
+                                passwordValid: validate(password,"password"),
+                                password: password
+                             })
+                        }
+                    }
                 />
                 <Text style={[styles.errorMessage,
                      this.state.passwordValid ? styles.setInvisible : null]}>Password must be more than 8 characters long</Text>
 
                 <View style={styles.buttonContainer}>
                     <Button
-                        onPress={() => {
-                            this.goToSignUp();
-                              }
-                         }
+                        onPress={() => {this.signIn()}}
                         title="Sign In"
                     />
                 </View>
 
                 <View style={styles.buttonContainer} >
                     <Button
-                        onPress={() => {
-                            this.goToSignUp();
-                              }   
-                        }
+                        onPress={() => {this.goToSignUp()}}
                         title="Sign Up"
                     />
                 </View>
