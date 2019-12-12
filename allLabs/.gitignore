@@ -1,0 +1,7 @@
+.expo-shared/
+.expo/
+.idea/
+node_modules/
+/package-lock.json
+/yarn.lock
+/.eslintrc.js
